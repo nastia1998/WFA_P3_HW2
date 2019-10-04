@@ -1,0 +1,24 @@
+{
+  "name": "wfa_p3_hw2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "computer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nastia1998/WFA_P3_HW2.git"
+  },
+  "author": "Anastasiya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nastia1998/WFA_P3_HW2/issues"
+  },
+  "homepage": "https://github.com/nastia1998/WFA_P3_HW2#readme",
+  "dependencies": {
+    "@babel/cli": "^7.6.2",
+    "grunt": "^1.0.4",
+    "uglify-js": "^3.6.0"
+  }
+}
