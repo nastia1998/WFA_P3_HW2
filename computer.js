@@ -58,20 +58,20 @@ class Ultrabook extends Computer {
 app.get('/computers/:id', (req, res) => {
     let compId = req.params.id;
     computers.findOne({ _id: compId }, (err, doc) => {
-        res.json(doc);
+        err === true ? res.json(err) : res.json(doc);
     });
 });
 
 app.get('/computers', (req, res) => {
     computers.find({}, (err, docs) => {
-        res.json(docs);
+        err === true ? res.json(err) : res.json(docs);
     });
 });
 
 app.post('/computers', (req, res) => {
     let computer = new Computer(req.body.manufacturer, req.body.processor);
     computers.insert(computer, (err, doc) => {
-        res.json(doc);
+        err === true ? res.json(err) : res.json(doc);
     })
 });
 
@@ -82,10 +82,18 @@ app.put('/computers', (req, res) => {
         $set:
             { _manufacturer: comp._manufacturer, _processor: comp._processor }
     }, {}, (err, numReplaced) => {
-        computers.findOne({ _id: comp._id }, (err, doc) => {
-            replComp = doc;
-            res.json(replComp);
-        });
+        if (err) {
+            res.json(err);
+        } else {
+            computers.findOne({ _id: comp._id }, (err, doc) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    replComp = doc;
+                    res.json(replComp);
+                }
+            });
+        }
     });
 });
 
@@ -94,11 +102,11 @@ app.delete('/computers', (req, res) => {
     let delComp = [];
 
     computers.findOne({ _id: id }, (err, doc) => {
-        delComp = doc;
+        err === true ? res.json(err) : (delComp = doc);
     });
 
     computers.remove({ _id: id }, (err, numDeleted) => {
-        res.json(delComp);
+        err === true ? res.json(err) : res.json(delComp);
     });
 });
 
