@@ -16,7 +16,7 @@ const computers = new Datastore({ filename: 'computers.db', autoload: true });
 
 class Computer {
     constructor(manufacturer, processor) {
-        this.id = uuidv4();
+        //this.id = uuidv4();
         this._manufacturer = manufacturer;
         this._processor = processor;
     }
@@ -59,13 +59,16 @@ class Ultrabook extends Computer {
 }
 
 app.get('/computers/:id', (req, res) => {
-    // let id = req.params.id;
-    // let computer = computers.find(comp => comp.id === id);
-    // res.json(computer);
+    let compId = req.params.id;
+    computers.findOne({ _id: compId }, (err, doc) => {
+        res.json(doc);
+    })
 });
 
 app.get('/computers', (req, res) => {
-    // res.json(computers);
+    computers.find({}, (err, docs) => {
+        res.json(docs);
+    });
 });
 
 app.post('/computers', (req, res) => {
