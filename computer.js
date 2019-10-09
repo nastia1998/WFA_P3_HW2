@@ -59,7 +59,7 @@ app.get('/computers/:id', (req, res) => {
     let compId = req.params.id;
     computers.findOne({ _id: compId }, (err, doc) => {
         res.json(doc);
-    })
+    });
 });
 
 app.get('/computers', (req, res) => {
@@ -93,9 +93,16 @@ app.put('/computers', (req, res) => {
 });
 
 app.delete('/computers', (req, res) => {
-    // let id = req.body.id;
-    // computers = computers.filter(comp => comp.id !== id);
-    // res.json(computers);
+    let id = req.body.id;
+    let delComp = [];
+
+    computers.findOne({ _id: id }, (err, doc) => {
+        delComp = doc;
+    });
+
+    computers.remove({ _id: id }, (err, numDeleted) => {
+        res.json(delComp);
+    });
 });
 
 app.get('/', (req, res) => res.send('Hello World!'));
