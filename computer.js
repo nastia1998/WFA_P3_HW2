@@ -76,20 +76,17 @@ app.post('/computers', (req, res) => {
 });
 
 app.put('/computers', (req, res) => {
-    // let comp = req.body;
-    // const updatedComputers = [];
-    // let newComp = [];
-    // computers.forEach(oldComp => {
-    //     if (oldComp.id === comp.id) {
-    //         updatedComputers.push(comp);
-    //         newComp = comp;
-
-    //     } else {
-    //         updatedComputers.push(oldComp);
-    //     }
-    // });
-    // computers = updatedComputers;
-    // res.json(newComp);
+    let comp = req.body;
+    let replComp = [];
+    computers.update({ _id: comp._id }, {
+        $set:
+            { _manufacturer: comp._manufacturer, _processor: comp._processor }
+    }, {}, (err, numReplaced) => {
+        computers.findOne({ _id: comp._id }, (err, doc) => {
+            replComp = doc;
+            res.json(replComp);
+        });
+    });
 });
 
 app.delete('/computers', (req, res) => {
