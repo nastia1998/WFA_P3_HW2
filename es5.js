@@ -22,6 +22,24 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var express = require('express');
+
+var bodyParser = require('body-parser');
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+var port = 3000;
+
+var Datastore = require('nedb');
+
+var computers = new Datastore({
+  filename: 'computers.db',
+  autoload: true
+});
+
 var Computer =
 /*#__PURE__*/
 function () {
@@ -91,8 +109,70 @@ function (_Computer) {
   return Ultrabook;
 }(Computer);
 
-var computer = new Computer("HP", "AMD");
-var ultrabook = new Ultrabook("Lenovo", "Intel", 256);
-console.log(computer.showInfo());
-console.log(ultrabook.showInfo());
+app.get('/computers/:id', function (req, res) {
+  var compId = req.params.id;
+  computers.findOne({
+    _id: compId
+  }, function (err, doc) {
+    err === true ? res.json(err) : res.json(doc);
+  });
+});
+app.get('/computers', function (req, res) {
+  computers.find({}, function (err, docs) {
+    err === true ? res.json(err) : res.json(docs);
+  });
+});
+app.post('/computers', function (req, res) {
+  var computer = new Computer(req.body.manufacturer, req.body.processor);
+  computers.insert(computer, function (err, doc) {
+    err === true ? res.json(err) : res.json(doc);
+  });
+});
+app.put('/computers', function (req, res) {
+  var comp = req.body;
+  var replComp = [];
+  computers.update({
+    _id: comp._id
+  }, {
+    $set: {
+      _manufacturer: comp._manufacturer,
+      _processor: comp._processor
+    }
+  }, {}, function (err, numReplaced) {
+    if (err) {
+      res.json(err);
+    } else {
+      computers.findOne({
+        _id: comp._id
+      }, function (err, doc) {
+        if (err) {
+          res.json(err);
+        } else {
+          replComp = doc;
+          res.json(replComp);
+        }
+      });
+    }
+  });
+});
+app["delete"]('/computers', function (req, res) {
+  var id = req.body.id;
+  var delComp = [];
+  computers.findOne({
+    _id: id
+  }, function (err, doc) {
+    err === true ? res.json(err) : delComp = doc;
+  });
+  computers.remove({
+    _id: id
+  }, function (err, numDeleted) {
+    err === true ? res.json(err) : res.json(delComp);
+  });
+});
+app.get('/', function (req, res) {
+  return res.send('Hello World!');
+});
+app.listen(port, function () {
+  return console.log("Server is listening on port ".concat(port, "!"));
+});
 //# sourceMappingURL=es5.js.map
