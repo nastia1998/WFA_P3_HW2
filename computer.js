@@ -87,7 +87,13 @@ app.put('/computers', (req, res) => {
     });
     computers = updatedComputers;
     res.json(computers);
-})
+});
+
+app.delete('/computers', (req, res) => {
+    let id = req.body.id;
+    computers = computers.filter(comp => comp.id !== id);
+    res.json(computers);
+});
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
