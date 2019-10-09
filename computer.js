@@ -71,7 +71,7 @@ app.get('/computers', (req, res) => {
 app.post('/computers', (req, res) => {
     let computer = new Computer(req.body.manufacturer, req.body.processor);
     computers.insert(computer, (err, doc) => {
-        res.json(computer);
+        res.json(doc);
     })
 });
 
