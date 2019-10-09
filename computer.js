@@ -63,30 +63,33 @@ computers.push(new Computer('Lenovo', 'AMD'));
 app.get('/computers/:id', (req, res) => {
     let id = req.params.id;
     let computer = computers.find(comp => comp.id === id);
-    res.send(computer);
+    res.json(computer);
 });
 
 app.get('/computers', (req, res) => {
-    res.send(JSON.stringify(computers));
+    res.json(computers);
 });
 
 app.post('/computers', (req, res) => {
     computers.push(new Computer(req.body.manufacturer, req.body.processor));
-    res.send(JSON.stringify(computers[computers.length - 1]));
+    res.json(computers[computers.length - 1]);
 });
 
 app.put('/computers', (req, res) => {
     let comp = req.body;
     const updatedComputers = [];
+    let newComp = [];
     computers.forEach(oldComp => {
         if (oldComp.id === comp.id) {
             updatedComputers.push(comp);
+            newComp = comp;
+
         } else {
             updatedComputers.push(oldComp);
         }
     });
     computers = updatedComputers;
-    res.json(computers);
+    res.json(newComp);
 });
 
 app.delete('/computers', (req, res) => {
