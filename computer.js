@@ -70,6 +70,11 @@ app.get('/computers', (req, res) => {
     res.send(JSON.stringify(computers));
 });
 
+app.post('/computers', (req, res) => {
+    computers.push(new Computer(req.body.manufacturer, req.body.processor));
+    res.send(JSON.stringify(computers[computers.length - 1]));
+});
+
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));
