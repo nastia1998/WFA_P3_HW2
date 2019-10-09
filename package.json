@@ -26,6 +26,7 @@
     "grunt": "^1.0.4",
     "grunt-babel": "^8.0.0",
     "load-grunt-tasks": "^5.1.0",
+    "nedb": "^1.8.0",
     "npm-watch": "^0.6.0",
     "uglify-js": "^3.6.0",
     "uuidv4": "^5.0.1"

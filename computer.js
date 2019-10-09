@@ -11,6 +11,9 @@ app.use(bodyParser.urlencoded({
 
 const port = 3000;
 
+const Datastore = require('nedb');
+const computers = new Datastore({ filename: 'computers.db', autoload: true });
+
 class Computer {
     constructor(manufacturer, processor) {
         this.id = uuidv4();
@@ -55,47 +58,44 @@ class Ultrabook extends Computer {
     }
 }
 
-let computers = [];
-
-computers.push(new Computer('LG', 'Intel'));
-computers.push(new Computer('Lenovo', 'AMD'));
-
 app.get('/computers/:id', (req, res) => {
-    let id = req.params.id;
-    let computer = computers.find(comp => comp.id === id);
-    res.json(computer);
+    // let id = req.params.id;
+    // let computer = computers.find(comp => comp.id === id);
+    // res.json(computer);
 });
 
 app.get('/computers', (req, res) => {
-    res.json(computers);
+    // res.json(computers);
 });
 
 app.post('/computers', (req, res) => {
-    computers.push(new Computer(req.body.manufacturer, req.body.processor));
-    res.json(computers[computers.length - 1]);
+    let computer = new Computer(req.body.manufacturer, req.body.processor);
+    computers.insert(computer, (err, doc) => {
+        res.json(computer);
+    })
 });
 
 app.put('/computers', (req, res) => {
-    let comp = req.body;
-    const updatedComputers = [];
-    let newComp = [];
-    computers.forEach(oldComp => {
-        if (oldComp.id === comp.id) {
-            updatedComputers.push(comp);
-            newComp = comp;
+    // let comp = req.body;
+    // const updatedComputers = [];
+    // let newComp = [];
+    // computers.forEach(oldComp => {
+    //     if (oldComp.id === comp.id) {
+    //         updatedComputers.push(comp);
+    //         newComp = comp;
 
-        } else {
-            updatedComputers.push(oldComp);
-        }
-    });
-    computers = updatedComputers;
-    res.json(newComp);
+    //     } else {
+    //         updatedComputers.push(oldComp);
+    //     }
+    // });
+    // computers = updatedComputers;
+    // res.json(newComp);
 });
 
 app.delete('/computers', (req, res) => {
-    let id = req.body.id;
-    computers = computers.filter(comp => comp.id !== id);
-    res.json(computers);
+    // let id = req.body.id;
+    // computers = computers.filter(comp => comp.id !== id);
+    // res.json(computers);
 });
 
 app.get('/', (req, res) => res.send('Hello World!'));
