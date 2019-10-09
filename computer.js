@@ -1,7 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const uuidv4 = require('uuidv4').default;
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -16,7 +14,6 @@ const computers = new Datastore({ filename: 'computers.db', autoload: true });
 
 class Computer {
     constructor(manufacturer, processor) {
-        //this.id = uuidv4();
         this._manufacturer = manufacturer;
         this._processor = processor;
     }
