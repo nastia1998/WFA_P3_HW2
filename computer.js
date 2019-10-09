@@ -1,5 +1,19 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const uuidv4 = require('uuidv4').default;
+
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+const port = 3000;
+
 class Computer {
     constructor(manufacturer, processor) {
+        this.id = uuidv4();
         this._manufacturer = manufacturer;
         this._processor = processor;
     }
@@ -41,8 +55,21 @@ class Ultrabook extends Computer {
     }
 }
 
-let computer = new Computer("HP", "AMD");
-let ultrabook = new Ultrabook("Lenovo", "Intel", 256);
+const computers = [];
 
-console.log(computer.showInfo());
-console.log(ultrabook.showInfo());
+computers.push(new Computer('LG', 'Intel'));
+computers.push(new Computer('Lenovo', 'AMD'));
+
+app.get('/computers/:id', (req, res) => {
+    let id = req.params.id;
+    let computer = computers.find(comp => comp.id === id);
+    res.send(computer);
+});
+
+app.get('/computers', (req, res) => {
+    res.send(JSON.stringify(computers));
+});
+
+app.get('/', (req, res) => res.send('Hello World!'));
+
+app.listen(port, () => console.log(`Server is listening on port ${port}!`));
