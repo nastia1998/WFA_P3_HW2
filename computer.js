@@ -55,7 +55,7 @@ class Ultrabook extends Computer {
     }
 }
 
-const computers = [];
+let computers = [];
 
 computers.push(new Computer('LG', 'Intel'));
 computers.push(new Computer('Lenovo', 'AMD'));
@@ -74,6 +74,20 @@ app.post('/computers', (req, res) => {
     computers.push(new Computer(req.body.manufacturer, req.body.processor));
     res.send(JSON.stringify(computers[computers.length - 1]));
 });
+
+app.put('/computers', (req, res) => {
+    let comp = req.body;
+    const updatedComputers = [];
+    computers.forEach(oldComp => {
+        if (oldComp.id === comp.id) {
+            updatedComputers.push(comp);
+        } else {
+            updatedComputers.push(oldComp);
+        }
+    });
+    computers = updatedComputers;
+    res.json(computers);
+})
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
